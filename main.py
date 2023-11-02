@@ -1,4 +1,3 @@
-
 from __future__ import print_function
 
 import argparse
@@ -121,8 +120,8 @@ def main():
 
     args.outf = os.path.join(args.outf, exp_id)
     if args.overwrite and os.path.isdir(args.outf):
-    	print('Will overwrite the existing output dir!')
-    	shutil.rmtree(args.outf)
+        print('Will overwrite the existing output dir!')
+        shutil.rmtree(args.outf)
 
     if not os.path.isdir(args.outf):
         os.makedirs(args.outf)
@@ -298,8 +297,8 @@ def train(local_rank, args):
     # setup dataloader
     img_transforms = transforms.ToTensor()
     DataSet = CustomDataSet
-    train_data_dir = f'./datasets/{args.dataset.lower()}'
-    val_data_dir = f'./datasets/{args.dataset.lower()}'
+    train_data_dir = f'{args.dataset}'
+    val_data_dir = f'{args.dataset}'
 
     train_dataset = DataSet(train_data_dir, img_transforms,vid_list=args.vid, resol=args.resol, frame_gap=args.frame_gap, )
     train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset) if args.distributed else None
@@ -673,5 +672,3 @@ def evaluate(model, train_dataloader, val_dataloader, local_rank, args):
 
 if __name__ == '__main__':
     main()
-    
-
