@@ -7,3 +7,4 @@ dahuffman
 Pillow
 yaspin
 tensorboard
+ptflops

@@ -23,6 +23,8 @@ from tqdm import tqdm
 from model import CustomDataSet, Generator
 from utils import *
 
+from ptflops import get_model_complexity_info
+
 def main():
     parser = argparse.ArgumentParser()
 
@@ -173,6 +175,16 @@ def train(local_rank, args):
     model = Generator(fc_hw_dim=args.fc_hw_dim, expansion=args.expansion, 
         num_blocks=args.num_blocks, norm=args.norm, act=args.act, bias = True, reduction=args.reduction, conv_type=args.conv_type,
         stride_list=args.strides,  sin_res=args.single_res,  lower_width=args.lower_width, sigmoid=args.sigmoid, aggs=len(args.agg_ind), wbit=args.wbit, t_dim=args.t_dim)
+
+    with torch.no_grad():
+        macs, params = get_model_complexity_info(
+            model,
+            (1,),
+            as_strings=True,
+            print_per_layer_stat=True,
+            verbose=True,
+        )
+        print("{:<30}  {:<8}".format("Computational complexity: ", macs))
 
     ##### prune model params and flops #####
     prune_net = args.prune_ratio < 1
