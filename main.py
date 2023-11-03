@@ -131,7 +131,7 @@ def main():
     print(f'init_method: {args.init_method}', flush=True)
 
     torch.set_printoptions(precision=2) 
-    args.ngpus_per_node = torch.cuda.device_count()
+    args.ngpus_per_node = 1
     if args.distributed and args.ngpus_per_node > 1:
         mp.spawn(train, nprocs=args.ngpus_per_node, args=(args,))
     else:
